@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046747.png" type="image/x-icon">
+<title>RiqueFla Receitas Gold</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+  -webkit-tap-highlight-color: transparent; 
+  -webkit-touch-callout: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: #F8F9FC;
+  color: #1E1E2F;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  padding-top: constant(safe-area-inset-top);
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: 85px;
+  overscroll-behavior-y: none;
+}
+
+/* ========== TELAS (SISTEMA DE NAVEGAÇÃO) ========== */
+.screen {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.screen.active {
+  display: block;
+  opacity: 1;
+}
+
+/* ========== TOOLBAR ========== */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  background: rgba(248, 249, 252, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 16px 20px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.header-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-name {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #F97316, #D97706);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 1.1;
+}
+
+.badge-premium {
+  font-size: 11px;
+  font-weight: 700;
+  color: #F97316;
+  letter-spacing: 1.5px;
+}
+
+.header-icons {
+  display: flex;
+  gap: 18px;
+  position: relative;
+}
+
+.header-icons i {
+  font-size: 22px;
+  color: #1E1E2F;
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #EF4444;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #F8F9FC;
+}
+
+/* ========== PERFIL SECTION ========== */
+.profile-section {
+  padding: 10px 20px 5px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatar-app {
+  width: 55px;
+  height: 55px;
+  background: linear-gradient(145deg, #F97316, #EA580C);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: white;
+  box-shadow: 0 6px 12px rgba(249, 115, 22, 0.25);
+}
+
+.welcome-text h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1E1E2F;
+}
+
+.welcome-text p {
+  font-size: 14px;
+  color: #64748B;
+  font-weight: 500;
+}
+
+/* ========== BUSCA ========== */
+.search-box {
+  padding: 15px 20px;
+}
+
+.search-wrapper {
+  background: #FFFFFF;
+  border-radius: 30px;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.search-wrapper i {
+  color: #F97316;
+  font-size: 18px;
+}
+
+.search-wrapper input {
+  background: transparent;
+  border: none;
+  padding: 12px 0;
+  font-size: 16px;
+  width: 100%;
+  outline: none;
+  font-weight: 500;
+}
+
+/* ========== GRID ========== */
+.section-label {
+  padding: 5px 20px;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-label span:last-child {
+  font-size: 14px;
+  color: #F97316;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.recipes-grid {
+  padding: 8px 20px 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.recipe-card {
+  background: #FFFFFF;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+  position: relative;
+  cursor: pointer;
+}
+
+.recipe-card:active::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.card-image {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+}
+
+.card-info {
+  padding: 14px 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.card-info h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1E1E2F;
+  flex: 1;
+}
+
+.bookmark-btn {
+  color: #CBD5E1;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-left: 8px;
+}
+
+.bookmark-btn.saved {
+  color: #F97316;
+}
+
+.bookmark-btn:active {
+  transform: scale(1.2);
+}
+
+/* ========== TELA EXPLORAR ========== */
+.categories-grid {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.category-item {
+  background: white;
+  padding: 15px 5px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+  border: 1px solid rgba(0,0,0,0.02);
+}
+
+.category-item i {
+  font-size: 24px;
+  color: #F97316;
+  margin-bottom: 8px;
+}
+
+.category-item span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+}
+
+/* ========== TELA PERFIL ========== */
+.profile-header {
+  padding: 30px 20px;
+  text-align: center;
+  background: linear-gradient(180deg, #FFF, #F8F9FC);
+}
+
+.profile-avatar-large {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(145deg, #F97316, #EA580C);
+  border-radius: 30px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 45px;
+  color: white;
+  box-shadow: 0 15px 25px rgba(249, 115, 22, 0.2);
+}
+
+.stats-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 25px 0;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 24px;
+  font-weight: 800;
+  color: #F97316;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #64748B;
+}
+
+/* ========== BOTTOM NAV ========== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 12px 20px 25px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  z-index: 1000;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: #A0AAB5;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.nav-item.active {
+  color: #F97316;
+}
+
+.nav-item i {
+  font-size: 22px;
+}
+
+.nav-item span {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ========== FAB ========== */
+.fab-add {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 58px;
+  height: 58px;
+  background: linear-gradient(145deg, #F97316, #EA580C);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 26px;
+  box-shadow: 0 12px 20px rgba(249, 115, 22, 0.35);
+  z-index: 999;
+  cursor: pointer;
+}
+
+/* ========== MODAIS ========== */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: none;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: #FFFFFF;
+  width: 100%;
+  padding: 30px 24px 40px;
+  border-radius: 32px 32px 0 0;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.btn-close-modal {
+  background: #F1F5F9;
+  border: none;
+  padding: 18px;
+  width: 100%;
+  border-radius: 20px;
+  font-weight: 700;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+/* Notificações */
+.notification-item {
+  padding: 16px;
+  background: #F8F9FC;
+  border-radius: 16px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.notification-icon {
+  width: 45px;
+  height: 45px;
+  background: #F97316;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== TELA INÍCIO ==================== -->
+<div id="homeScreen" class="screen active">
+  <div class="app-header">
+    <div class="header-title">
+      <span class="app-name">RiqueFla</span>
+      <span class="badge-premium"><i class="fas fa-crown" style="font-size: 10px;"></i> SISTEMA GOLD</span>
+    </div>
+    <div class="header-icons">
+      <i class="far fa-bookmark" onclick="showSavedModal()" style="cursor:pointer;"></i>
+      <div style="position: relative;">
+        <i class="far fa-bell" onclick="showNotifications()"></i>
+        <span class="notification-badge">3</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-section">
+    <div class="avatar-app">
+      <i class="fas fa-chef-hat"></i>
+    </div>
+    <div class="welcome-text">
+      <h2>Olá, Chef! 👨‍🍳</h2>
+      <p>Bem-vindo ao <span style="color:#F97316; font-weight:700;">Sistema Gold</span></p>
+    </div>
+  </div>
+
+  <div class="search-box">
+    <div class="search-wrapper">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Buscar receitas exclusivas..." autocomplete="off">
+    </div>
+  </div>
+
+  <div class="section-label">
+    <span>Destaques Gold</span>
+    <span onclick="showAllRecipes()">Ver Todas <i class="fas fa-chevron-right" style="font-size: 10px;"></i></span>
+  </div>
+
+  <div class="recipes-grid" id="recipesContainer"></div>
+</div>
+
+<!-- ==================== TELA EXPLORAR ==================== -->
+<div id="exploreScreen" class="screen">
+  <div class="app-header">
+    <div class="header-title">
+      <span class="app-name">Explorar</span>
+    </div>
+    <div class="header-icons">
+      <i class="fas fa-sliders-h"></i>
+    </div>
+  </div>
+
+  <div class="search-box">
+    <div class="search-wrapper">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Pesquisar categorias...">
+    </div>
+  </div>
+
+  <div class="section-label">
+    <span>Categorias</span>
+  </div>
+
+  <div class="categories-grid">
+    <div class="category-item">
+      <i class="fas fa-hamburger"></i>
+      <span>Burgers</span>
+    </div>
+    <div class="category-item">
+      <i class="fas fa-pizza-slice"></i>
+      <span>Massas</span>
+    </div>
+    <div class="category-item">
+      <i class="fas fa-fish"></i>
+      <span>Frutos do Mar</span>
+    </div>
+    <div class="category-item">
+      <i class="fas fa-cake"></i>
+      <span>Sobremesas</span>
+    </div>
+    <div class="category-item">
+      <i class="fas fa-mug-hot"></i>
+      <span>Bebidas</span>
+    </div>
+    <div class="category-item">
+      <i class="fas fa-leaf"></i>
+      <span>Vegano</span>
+    </div>
+    <div class="category-item">
+      <i class="fas fa-drumstick-bite"></i>
+      <span>Carnes</span>
+    </div>
+    <div class="category-item">
+      <i class="fas fa-bread-slice"></i>
+      <span>Padaria</span>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top: 20px;">
+    <span>Tendências da Semana</span>
+  </div>
+
+  <div class="recipes-grid" id="exploreRecipesGrid"></div>
+</div>
+
+<!-- ==================== TELA PERFIL ==================== -->
+<div id="profileScreen" class="screen">
+  <div class="app-header">
+    <div class="header-title">
+      <span class="app-name">Perfil</span>
+    </div>
+    <div class="header-icons">
+      <i class="fas fa-cog"></i>
+    </div>
+  </div>
+
+  <div class="profile-header">
+    <div class="profile-avatar-large">
+      <i class="fas fa-user-ninja"></i>
+    </div>
+    <h2 style="font-size: 24px; margin-bottom: 5px;">RiqueFla</h2>
+    <span class="badge-premium" style="background: #F97316; color: white; padding: 5px 15px; border-radius: 20px;">
+      <i class="fas fa-crown"></i> CHEF GOLD
+    </span>
+
+    <div class="stats-container">
+      <div class="stat-item">
+        <div class="stat-number">48</div>
+        <div class="stat-label">Receitas</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">12.5k</div>
+        <div class="stat-label">Seguidores</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">4</div>
+        <div class="stat-label">Premiações</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 20px;">
+    <div style="background: white; padding: 20px; border-radius: 20px;">
+      <h3 style="margin-bottom: 15px;">Minhas Receitas Salvas</h3>
+      <div id="savedRecipesList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== BOTTOM NAVIGATION ========== -->
+<div class="bottom-nav">
+  <div class="nav-item active" data-screen="home" onclick="switchScreen('home')">
+    <i class="fas fa-home"></i>
+    <span>Início</span>
+  </div>
+  <div class="nav-item" data-screen="explore" onclick="switchScreen('explore')">
+    <i class="fas fa-search"></i>
+    <span>Explorar</span>
+  </div>
+  <div class="nav-item" data-screen="profile" onclick="switchScreen('profile')">
+    <i class="fas fa-user"></i>
+    <span>Perfil</span>
+  </div>
+</div>
+
+<!-- FAB -->
+<div class="fab-add" onclick="alert('➕ Adicionar nova receita Gold')">
+  <i class="fas fa-plus"></i>
+</div>
+
+<!-- MODAL DE NOTIFICAÇÕES -->
+<div class="modal-overlay" id="notificationsModal">
+  <div class="modal-content">
+    <h2 style="margin-bottom: 20px;"><i class="far fa-bell" style="margin-right: 10px;"></i> Notificações</h2>
+    <div class="notification-item">
+      <div class="notification-icon"><i class="fas fa-crown"></i></div>
+      <div><strong>Sistema Gold Ativado!</strong><br><small>Bem-vindo ao nível premium.</small></div>
+    </div>
+    <div class="notification-item">
+      <div class="notification-icon"><i class="fas fa-star"></i></div>
+      <div><strong>Nova receita exclusiva</strong><br><small>Risoto de Camarão adicionado.</small></div>
+    </div>
+    <div class="notification-item">
+      <div class="notification-icon"><i class="fas fa-heart"></i></div>
+      <div><strong>Sua receita foi favoritada</strong><br><small>+25 pessoas salvaram hoje.</small></div>
+    </div>
+    <button class="btn-close-modal" onclick="closeModal('notificationsModal')">FECHAR</button>
+  </div>
+</div>
+
+<!-- MODAL DE RECEITAS SALVAS -->
+<div class="modal-overlay" id="savedModal">
+  <div class="modal-content">
+    <h2><i class="fas fa-bookmark" style="color: #F97316;"></i> Receitas Salvas</h2>
+    <div id="savedModalList" style="margin: 20px 0;"></div>
+    <button class="btn-close-modal" onclick="closeModal('savedModal')">FECHAR</button>
+  </div>
+</div>
+
+<!-- MODAL DE DETALHES DA RECEITA -->
+<div class="modal-overlay" id="recipeModal">
+  <div class="modal-content" id="modalContent"></div>
+</div>
+
+<script>
+  // ========== DADOS ==========
+  const allRecipes = [
+    { id: 1, title: "Burger Artesanal", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400", steps: "🥩 Moa a carne na hora.\n🧂 Tempere com sal grosso.\n🔥 Grelhe 3min cada lado.\n🍞 Monte no brioche.", saved: false },
+    { id: 2, title: "Risoto de Camarão", image: "https://images.unsplash.com/photo-1515516969-d4008cc6241a?w=400", steps: "🍚 Refogue cebola e alho.\n🍷 Adicione vinho branco.\n🥣 Caldo aos poucos.\n🍤 Finalize com camarões.", saved: false },
+    { id: 3, title: "Bolo de Chocolate", image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400", steps: "🍫 Misture secos.\n🥚 Adicione ovos e óleo.\n🎂 Asse 35min.\n✨ Cubra com ganache.", saved: false },
+    { id: 4, title: "Salmão Grelhado", image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=400", steps: "🐟 Tempere com ervas.\n🔥 Grelhe com azeite.\n🥗 Sirva com legumes.", saved: false },
+    { id: 5, title: "Picanha na Brasa", image: "https://images.unsplash.com/photo-1558030006-450675393462?w=400", steps: "🥩 Corte em bifes grossos.\n🧂 Sal grosso apenas.\n🔥 4min cada lado.", saved: false },
+    { id: 6, title: "Mousse de Maracujá", image: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=400", steps: "🥭 Bata polpa e leite condensado.\n❄️ Geladeira 4h.\n🍯 Decore com sementes.", saved: false }
+  ];
+
+  let savedRecipes = JSON.parse(localStorage.getItem('savedRecipes')) || [];
+  
+  // Atualiza estado inicial dos salvos
+  allRecipes.forEach(r => { if(savedRecipes.includes(r.id)) r.saved = true; });
+
+  // ========== RENDERIZAÇÃO ==========
+  function renderRecipes(containerId, recipesList) {
+    const container = document.getElementById(containerId);
+    if(!container) return;
+    container.innerHTML = '';
+    recipesList.forEach(recipe => {
+      const card = document.createElement('div');
+      card.className = 'recipe-card';
+      card.innerHTML = `
+        <img src="${recipe.image}" class="card-image">
+        <div class="card-info">
+          <h3>${recipe.title}</h3>
+          <i class="fas fa-bookmark bookmark-btn ${recipe.saved ? 'saved' : ''}" onclick="toggleSave(event, ${recipe.id})"></i>
+        </div>
+      `;
+      card.onclick = (e) => { if(!e.target.classList.contains('bookmark-btn')) showRecipeDetails(recipe); };
+      container.appendChild(card);
+    });
+  }
+
+  // Salvar/Favoritar
+  window.toggleSave = function(event, id) {
+    event.stopPropagation();
+    const recipe = allRecipes.find(r => r.id === id);
+    recipe.saved = !recipe.saved;
+    
+    if(recipe.saved) savedRecipes.push(id);
+    else savedRecipes = savedRecipes.filter(rid => rid !== id);
+    
+    localStorage.setItem('savedRecipes', JSON.stringify(savedRecipes));
+    
+    // Atualiza ícone
+    const icon = event.target;
+    icon.classList.toggle('saved');
+    
+    // Atualiza listas
+    renderRecipes('recipesContainer', allRecipes.slice(0,4));
+    renderRecipes('exploreRecipesGrid', allRecipes.slice(0,4));
+    updateSavedList();
+  };
+
+  // Detalhes da Receita
+  function showRecipeDetails(recipe) {
+    document.getElementById('modalContent').innerHTML = `
+      <h2>${recipe.title}</h2>
+      <p style="white-space: pre-line; line-height: 1.8;">${recipe.steps}</p>
+      <button class="btn-close-modal" onclick="closeModal('recipeModal')">VOLTAR</button>
+    `;
+    document.getElementById('recipeModal').style.display = 'flex';
+  }
+
+  // Navegação entre telas
+  window.switchScreen = function(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId + 'Screen').classList.add('active');
+    
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.remove('active');
+      if(item.dataset.screen === screenId) item.classList.add('active');
+    });
+
+    if(screenId === 'explore') renderRecipes('exploreRecipesGrid', allRecipes.slice(0,4));
+    if(screenId === 'profile') updateSavedList();
+  };
+
+  // Funções dos botões do header
+  window.showNotifications = () => document.getElementById('notificationsModal').style.display = 'flex';
+  window.showSavedModal = () => {
+    updateSavedModalList();
+    document.getElementById('savedModal').style.display = 'flex';
+  };
+  window.showAllRecipes = () => {
+    switchScreen('explore');
+    renderRecipes('exploreRecipesGrid', allRecipes);
+  };
+
+  window.closeModal = (id) => document.getElementById(id).style.display = 'none';
+
+  // Atualizar lista de salvos no perfil
+  function updateSavedList() {
+    const container = document.getElementById('savedRecipesList');
+    const saved = allRecipes.filter(r => r.saved);
+    if(container) {
+      container.innerHTML = saved.length ? saved.map(r => `<div style="padding:10px; border-bottom:1px solid #eee;">🍽️ ${r.title}</div>`).join('') : '<p>Nenhuma receita salva ainda.</p>';
+    }
+  }
+
+  function updateSavedModalList() {
+    const container = document.getElementById('savedModalList');
+    const saved = allRecipes.filter(r => r.saved);
+    container.innerHTML = saved.length ? saved.map(r => `<div style="padding:15px; background:#F8F9FC; border-radius:15px; margin-bottom:10px;"><strong>${r.title}</strong></div>`).join('') : '<p>Nenhuma receita salva.</p>';
+  }
+
+  // Busca
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    renderRecipes('recipesContainer', allRecipes.filter(r => r.title.toLowerCase().includes(term)).slice(0,4));
+  });
+
+  // Inicialização
+  renderRecipes('recipesContainer', allRecipes.slice(0,4));
+  renderRecipes('exploreRecipesGrid', allRecipes.slice(0,4));
+  updateSavedList();
+
+  // Fechar modais ao clicar fora
+  document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', (e) => { if(e.target === m) m.style.display = 'none'; }));
+</script>
+
+</body>
+</html>
