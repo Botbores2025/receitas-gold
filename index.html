@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046747.png" type="image/x-icon">
-<title>RiqueFla Receitas Gold • Cinema</title>
+<title>RiqueFla Receitas Gold</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -27,9 +27,22 @@ body {
   color: #1E1E2F;
   font-family: 'Inter', sans-serif;
   min-height: 100vh;
-  padding-bottom: 130px; 
-  overscroll-behavior-y: auto;  /* conserta scroll travado */
+  padding-bottom: 120px; 
+  overscroll-behavior-y: none;
+}
+
+/* ========== CORREÇÃO SCROLL EXPLORAR ========== */
+.screen {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.2s;
   overflow-y: auto;
+  max-height: calc(100vh - 120px);
+}
+
+.screen.active {
+  display: block;
+  opacity: 1;
 }
 
 /* ========== TELA DE CARREGAMENTO (SPLASH) ========== */
@@ -43,7 +56,6 @@ body {
   justify-content: center;
   z-index: 9999;
   transition: opacity 0.5s ease;
-  pointer-events: none;
 }
 
 .loader {
@@ -57,18 +69,6 @@ body {
 }
 
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-/* ========== TELAS ========== */
-.screen {
-  display: none;
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-.screen.active {
-  display: block;
-  opacity: 1;
-}
 
 /* ========== TOOLBAR ========== */
 .app-header {
@@ -299,7 +299,30 @@ body {
   color: #475569;
 }
 
-/* ========== BOTTOM NAV (AJUSTADO PARA ANDROID) ========== */
+/* ========== PERFIL ========== */
+.profile-header {
+  padding: 30px 20px;
+  text-align: center;
+  background: white;
+  margin: 20px;
+  border-radius: 30px;
+}
+
+.profile-avatar-large {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(145deg, #F97316, #EA580C);
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  color: white;
+  margin: 0 auto 20px;
+  box-shadow: 0 10px 20px rgba(249, 115, 22, 0.2);
+}
+
+/* ========== BOTTOM NAV ========== */
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -310,7 +333,7 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 12px 20px 35px; 
+  padding: 12px 20px 45px;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   z-index: 1000;
 }
@@ -344,6 +367,7 @@ body {
   font-size: 26px;
   box-shadow: 0 12px 20px rgba(249, 115, 22, 0.35);
   z-index: 999;
+  cursor: pointer;
 }
 
 /* ========== MODAIS ========== */
@@ -356,8 +380,6 @@ body {
   justify-content: center;
   align-items: flex-end;
   z-index: 2000;
-  overflow-y: auto;
-  padding-bottom: 20px;
 }
 
 .modal-content {
@@ -386,35 +408,14 @@ body {
   cursor: pointer;
 }
 
-/* ========== ESTILO CINEMA: SINOPSE, VÍDEO, INGREDIENTES ========== */
-.cinema-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.cinema-header i {
-  font-size: 28px;
-  color: #F97316;
-  background: #FFF5EE;
-  padding: 10px;
-  border-radius: 16px;
-}
-
-.cinema-header h2 {
-  font-size: 22px;
-  font-weight: 800;
-}
-
+/* ========== NOVO: ESTILOS DO PLAYER DE VÍDEO ========== */
 .video-container {
   position: relative;
   padding-bottom: 56.25%;
   height: 0;
-  margin: 20px 0 16px;
-  border-radius: 24px;
+  margin: 20px 0;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
 .video-container iframe {
@@ -426,59 +427,33 @@ body {
   border: 0;
 }
 
-.sinopse-box {
-  background: #F8F9FC;
-  padding: 18px;
-  border-radius: 24px;
-  margin: 18px 0;
-  border-left: 6px solid #F97316;
-}
-
-.ingredientes-lista {
+.ingredientes-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin: 18px 0;
-}
-
-.ingrediente-item {
-  background: white;
-  padding: 12px 8px;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  border: 1px solid #f1f5f9;
-}
-
-.ingrediente-item i {
-  color: #F97316;
-  width: 20px;
-}
-
-.steps-box {
-  background: #FFFFFF;
-  padding: 16px;
-  border-radius: 24px;
-  white-space: pre-line;
-  line-height: 1.7;
+  gap: 10px;
   margin: 15px 0;
-  border: 1px solid #eee;
 }
 
-/* mais itens visuais */
-.item-badge {
-  display: inline-block;
-  background: #F97316;
-  color: white;
-  border-radius: 30px;
-  padding: 4px 14px;
-  font-size: 12px;
+.ingrediente-tag {
+  background: #F8F9FC;
+  padding: 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #E2E8F0;
+}
+
+.ingrediente-tag i {
+  color: #F97316;
   margin-right: 8px;
-  font-weight: 600;
+}
+
+.sinopse-box {
+  background: #FFF5EE;
+  padding: 16px;
+  border-radius: 16px;
+  margin: 15px 0;
+  border-left: 4px solid #F97316;
 }
 </style>
 </head>
@@ -524,25 +499,15 @@ body {
   </div>
 
   <div class="section-label">
-    <span>🍿 Em cartaz • Destaques</span>
+    <span>Destaques Gold</span>
     <span onclick="switchScreen('explore')">Ver Todas</span>
   </div>
   <div class="recipes-grid" id="recipesContainer"></div>
-  
-  <!-- Mais itens: seção extra filmes/receitas -->
-  <div class="section-label" style="margin-top: 5px;">
-    <span>🔥 Receitas rápidas</span>
-    <span><i class="fas fa-chevron-right"></i></span>
-  </div>
-  <div class="recipes-grid" id="featuredExtra"></div>
 </div>
 
 <div id="exploreScreen" class="screen">
   <div class="app-header">
     <div class="header-title"><span class="app-name">Explorar</span></div>
-    <div class="header-icons">
-      <i class="fas fa-sliders-h"></i>
-    </div>
   </div>
 
   <div class="categories-grid" id="categoriesGrid">
@@ -552,19 +517,17 @@ body {
     <div class="category-item" onclick="filterCategory('Chocolate')"><i class="fas fa-cake"></i><span>Doces</span></div>
   </div>
 
-  <div class="section-label"><span>Todas as receitas</span><span id="itemCount">4 itens</span></div>
+  <div class="section-label"><span>Receitas Disponíveis</span></div>
   <div class="recipes-grid" id="exploreRecipesGrid"></div>
 </div>
 
 <div id="profileScreen" class="screen">
-  <div class="app-header">
-    <div class="header-title"><span class="app-name">Perfil Gold</span></div>
+  <div class="profile-header">
+    <div class="profile-avatar-large"><i class="fas fa-user-ninja"></i></div>
+    <h2>RiqueFla</h2>
+    <span class="badge-premium" style="background: #F97316; color: white; padding: 5px 15px; border-radius: 20px;">CHEF GOLD</span>
   </div>
-  <div style="padding: 20px; text-align: center;">
-    <div class="avatar-app" style="width: 80px; height: 80px; margin: 10px auto;"><i class="fas fa-crown"></i></div>
-    <h2>Chef RiqueFla</h2>
-    <div id="savedRecipesList" style="padding: 20px;"></div>
-  </div>
+  <div id="savedRecipesList" style="padding: 20px;"></div>
 </div>
 
 <div class="bottom-nav">
@@ -573,7 +536,7 @@ body {
   <div class="nav-item" onclick="switchScreen('profile')"><i class="fas fa-user"></i><span>Perfil</span></div>
 </div>
 
-<div class="fab-add" id="fabBtn" onclick="showGoldAlert('🎬 Modo Cinema', 'Em breve: grave seu próprio vídeo!')"><i class="fas fa-plus"></i></div>
+<div class="fab-add" id="fabBtn" onclick="showGoldAlert('➕ Nova Receita', 'Em breve você poderá adicionar suas próprias receitas!')"><i class="fas fa-plus"></i></div>
 
 <div class="modal-overlay" id="customAlertModal">
   <div class="modal-content" style="text-align: center;">
@@ -584,167 +547,178 @@ body {
   </div>
 </div>
 
-<!-- MODAL ESTILO CINEMA COM VÍDEO + INGREDIENTES -->
 <div class="modal-overlay" id="recipeModal">
   <div class="modal-content" id="modalContent"></div>
 </div>
 
 <script>
-  (function(){
-    // SPLASH SCREEN
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            const splash = document.getElementById('splash-screen');
-            splash.style.opacity = '0';
-            setTimeout(() => splash.style.display = 'none', 500);
-        }, 2000);
-    });
+  // SPLASH SCREEN
+  window.addEventListener('load', () => {
+      setTimeout(() => {
+          const splash = document.getElementById('splash-screen');
+          splash.style.opacity = '0';
+          setTimeout(() => splash.style.display = 'none', 500);
+      }, 2500);
+  });
 
-    // DADOS ENRIQUECIDOS COM INGREDIENTES, VÍDEO (YOUTUBE EMBED)
-    const allRecipes = [
-      { 
-        id: 1, title: "Burger Artesanal", 
-        image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400", 
-        sinopse: "Um hambúrguer suculento com blend de costela, cheddar cremoso e pão brioche. Finalizado com cebola caramelizada.",
-        videoId: "iM_KMYulI_s",  // vídeo público de hambúrguer
-        ingredientes: ["500g costela moída", "Pão brioche", "Cheddar fatiado", "Cebola roxa", "Molho barbecue"],
-        steps: "🥩 Modele o blend de costela.\n🔥 Grelhe em fogo alto 3 min cada lado.\n🧀 Adicione cheddar e abafe.\n🍔 Monte com cebola caramelizada.",
-        saved: false 
-      },
-      { 
-        id: 2, title: "Risoto de Camarão", 
-        image: "https://images.unsplash.com/photo-1515516969-d4008cc6241a?w=400", 
-        sinopse: "Risoto cremoso de camarões frescos, finalizado com limão siciliano e ervas. Toque de vinho branco.",
-        videoId: "tBrjqVk3uD4",
-        ingredientes: ["1 xíc arroz arbóreo", "300g camarão limpo", "Vinho branco seco", "Caldo de legumes", "Limão siciliano", "Parmesão"],
-        steps: "🍚 Refogue arroz no azeite.\n🍤 Adicione camarões e vinho.\n🥄 Cozinhe com caldo aos poucos.\n🍋 Finalize com raspas de limão.",
-        saved: false 
-      },
-      { 
-        id: 3, title: "Bolo de Chocolate", 
-        image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400", 
-        sinopse: "Massa de chocolate meio amargo, recheio de ganache e cobertura brilhante. Perfeito para sobremesa.",
-        videoId: "dsJtgmAhFF4",
-        ingredientes: ["2 xícaras farinha", "1 xícara cacau 70%", "3 ovos", "1 xícara açúcar", "200g chocolate meio amargo", "Creme de leite"],
-        steps: "🍫 Misture secos e líquidos.\n🎂 Asse por 35min a 180°C.\n✨ Ganache: derreta chocolate com creme.\n🍰 Cubra o bolo e decore.",
-        saved: true 
-      },
-      { 
-        id: 4, title: "Salmão Grelhado", 
-        image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=400", 
-        sinopse: "Filé de salmão com crosta de ervas, servido com legumes salteados. Leve e saudável.",
-        videoId: "b1I0e3cXk8Y",
-        ingredientes: ["2 filés de salmão", "Azeite", "Ervas finas", "Alho", "Legumes variados", "Sal marinho"],
-        steps: "🐟 Tempere o salmão com ervas.\n🌿 Grelhe na frigideira com pele.\n🥗 Salteie legumes no alho.\n🍋 Sirva com limão.",
-        saved: false 
-      }
-    ];
-
-    // mais itens para grid extra (receitas rápidas)
-    const quickRecipes = allRecipes.slice(0,2); 
-
-    function renderRecipes(containerId, list) {
-      const container = document.getElementById(containerId);
-      if(!container) return;
-      container.innerHTML = '';
-      list.forEach(r => {
-        const card = document.createElement('div');
-        card.className = 'recipe-card';
-        card.innerHTML = `<img src="${r.image}" class="card-image"><div class="card-info"><h3>${r.title}</h3><i class="fas fa-bookmark bookmark-btn ${r.saved ? 'saved' : ''}" onclick="toggleSave(event, ${r.id})"></i></div>`;
-        card.onclick = (e) => { if(!e.target.classList.contains('bookmark-btn')) openCinemaRecipe(r); };
-        container.appendChild(card);
-      });
-    }
-
-    // NOVO MÉTODO: ABRE RECEITA ESTILO CINEMA COM VÍDEO, SINOPSE, INGREDIENTES
-    window.openCinemaRecipe = (r) => {
-      const modal = document.getElementById('modalContent');
-      const ingredientesHtml = r.ingredientes.map(ing => 
-        `<div class="ingrediente-item"><i class="fas fa-check-circle"></i> ${ing}</div>`
-      ).join('');
-      
-      modal.innerHTML = `
-        <div class="cinema-header">
-          <i class="fas fa-clapperboard"></i>
-          <h2>${r.title}</h2>
-        </div>
-        <div class="video-container">
-          <iframe src="https://www.youtube.com/embed/${r.videoId}?autoplay=0&mute=0&controls=1&modestbranding=1&rel=0" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="sinopse-box">
-          <span class="item-badge"><i class="fas fa-film"></i> SINOPSE</span>
-          <p style="margin-top: 12px; font-weight: 500;">${r.sinopse}</p>
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <h3 style="font-size: 18px;"><i class="fas fa-basket-shopping" style="margin-right: 8px; color:#F97316;"></i>Ingredientes</h3>
-          <span style="background:#F97316; color:white; padding:3px 12px; border-radius:30px; font-size:13px;">${r.ingredientes.length} itens</span>
-        </div>
-        <div class="ingredientes-lista">
-          ${ingredientesHtml}
-        </div>
-        <div style="margin: 10px 0;">
-          <span class="item-badge"><i class="fas fa-utensils"></i> MODO DE PREPARO</span>
-        </div>
-        <div class="steps-box">
-          ${r.steps}
-        </div>
-        <button class="btn-close-modal" onclick="closeModal('recipeModal')" style="background: #F97316; color: white; font-weight: 700;"><i class="fas fa-times"></i> FECHAR</button>
-      `;
-      document.getElementById('recipeModal').style.display = 'flex';
-    };
-
-    window.toggleSave = (e, id) => {
-      e.stopPropagation();
-      const r = allRecipes.find(x => x.id === id);
-      if(r) r.saved = !r.saved;
-      showGoldAlert(r.saved ? "🍿 Salvo na coleção!" : "Removido", r.saved ? "Receita adicionada à sua lista." : "Receita removida.");
-      renderRecipes('recipesContainer', allRecipes);
-      renderRecipes('exploreRecipesGrid', allRecipes);
-      renderRecipes('featuredExtra', quickRecipes);
-    };
-
-    window.filterCategory = (cat) => {
-      const filtered = allRecipes.filter(r => r.title.includes(cat));
-      renderRecipes('exploreRecipesGrid', filtered);
-      document.getElementById('itemCount').innerText = filtered.length + ' itens';
-    };
-
-    window.switchScreen = (screenId) => {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(screenId + 'Screen').classList.add('active');
-      
-      document.querySelectorAll('.nav-item').forEach((n, idx) => {
-        n.classList.remove('active');
-        if((screenId==='home'&&idx===0) || (screenId==='explore'&&idx===1) || (screenId==='profile'&&idx===2))
-          n.classList.add('active');
-      });
-      
-      if(screenId === 'explore') {
-        renderRecipes('exploreRecipesGrid', allRecipes);
-        document.getElementById('itemCount').innerText = allRecipes.length + ' itens';
-      }
-    };
-
-    window.showGoldAlert = (title, text) => {
-      document.getElementById('customAlertTitle').innerText = title;
-      document.getElementById('customAlertText').innerText = text;
+  // FUNÇÃO GOLD ALERT
+  function showGoldAlert(titulo, texto) {
+      document.getElementById('customAlertTitle').innerText = titulo;
+      document.getElementById('customAlertText').innerText = texto;
       document.getElementById('customAlertModal').style.display = 'flex';
-    };
-    
-    window.closeModal = (id) => document.getElementById(id).style.display = 'none';
-    window.showSavedModal = () => showGoldAlert('⭐ Favoritos', 'Acesse seu perfil para ver salvos.');
-    window.showNotifications = () => showGoldAlert('🔔 Novidades', 'Novo vídeo de receita disponível!');
+  }
 
-    // Inicialização
+  // DADOS DAS RECEITAS COM VÍDEO E INGREDIENTES
+  const allRecipes = [
+    { 
+      id: 1, 
+      title: "Burger Artesanal", 
+      image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400", 
+      steps: "🥩 Blend de costela.\n🔥 Fogo alto.\n🧀 Cheddar derretido.",
+      videoId: "iM_KMYulI_s",
+      sinopse: "Hambúrguer suculento com blend premium de costela, cheddar cremoso e pão brioche tostado.",
+      ingredientes: ["500g costela moída", "Pão brioche", "Cheddar", "Cebola caramelizada", "Molho especial"],
+      saved: false 
+    },
+    { 
+      id: 2, 
+      title: "Risoto de Camarão", 
+      image: "https://images.unsplash.com/photo-1515516969-d4008cc6241a?w=400", 
+      steps: "🍚 Arroz arbóreo.\n🍤 Camarões frescos.\n🍋 Toque de limão.",
+      videoId: "tBrjqVk3uD4",
+      sinopse: "Risoto cremoso com camarões frescos, finalizado com limão siciliano e ervas finas.",
+      ingredientes: ["1 xíc arroz arbóreo", "300g camarão", "Vinho branco", "Caldo de legumes", "Limão", "Parmesão"],
+      saved: false 
+    },
+    { 
+      id: 3, 
+      title: "Bolo de Chocolate", 
+      image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400", 
+      steps: "🍫 Cacau 70%.\n🎂 Massa fofinha.\n✨ Ganache brilho.",
+      videoId: "dsJtgmAhFF4",
+      sinopse: "Bolo de chocolate meio amargo com ganache brilhante e massa super fofinha.",
+      ingredientes: ["2 xíc farinha", "1 xíc cacau 70%", "3 ovos", "1 xíc açúcar", "200g chocolate", "Creme de leite"],
+      saved: false 
+    },
+    { 
+      id: 4, 
+      title: "Salmão Grelhado", 
+      image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=400", 
+      steps: "🐟 Salmão premium.\n🌿 Ervas finas.\n🥗 Salada leve.",
+      videoId: "b1I0e3cXk8Y",
+      sinopse: "Filé de salmão grelhado com crosta de ervas, acompanhado de legumes frescos.",
+      ingredientes: ["2 filés salmão", "Azeite", "Ervas finas", "Alho", "Legumes", "Sal marinho"],
+      saved: false 
+    }
+  ];
+
+  function renderRecipes(containerId, list) {
+    const container = document.getElementById(containerId);
+    if(!container) return;
+    container.innerHTML = '';
+    list.forEach(r => {
+      const card = document.createElement('div');
+      card.className = 'recipe-card';
+      card.innerHTML = `<img src="${r.image}" class="card-image"><div class="card-info"><h3>${r.title}</h3><i class="fas fa-bookmark bookmark-btn ${r.saved ? 'saved' : ''}" onclick="toggleSave(event, ${r.id})"></i></div>`;
+      card.onclick = (e) => { if(!e.target.classList.contains('bookmark-btn')) openRecipe(r); };
+      container.appendChild(card);
+    });
+  }
+
+  // NOVA FUNÇÃO: ABRE RECEITA COM VÍDEO, SINOPSE E INGREDIENTES
+  function openRecipe(r) {
+    const ingredientesHtml = r.ingredientes.map(ing => 
+      `<div class="ingrediente-tag"><i class="fas fa-check-circle"></i> ${ing}</div>`
+    ).join('');
+    
+    document.getElementById('modalContent').innerHTML = `
+      <h2 style="margin-bottom: 5px;">${r.title}</h2>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/${r.videoId}?autoplay=0&controls=1" allowfullscreen></iframe>
+      </div>
+      <div class="sinopse-box">
+        <strong style="color: #F97316;">📽️ SINOPSE</strong>
+        <p style="margin-top: 8px;">${r.sinopse}</p>
+      </div>
+      <h3 style="margin: 15px 0 10px;"><i class="fas fa-shopping-basket" style="color: #F97316; margin-right: 8px;"></i>Ingredientes</h3>
+      <div class="ingredientes-grid">${ingredientesHtml}</div>
+      <h3 style="margin: 15px 0 10px;"><i class="fas fa-utensils" style="color: #F97316; margin-right: 8px;"></i>Modo de Preparo</h3>
+      <p style="white-space:pre-line; margin:20px 0; line-height:1.6; background: #F8F9FC; padding: 16px; border-radius: 16px;">${r.steps}</p>
+      <button class="btn-close-modal" onclick="closeModal('recipeModal')" style="background: #F97316; color: white;">FECHAR</button>
+    `;
+    document.getElementById('recipeModal').style.display = 'flex';
+  }
+
+  window.toggleSave = (e, id) => {
+    e.stopPropagation();
+    const r = allRecipes.find(x => x.id === id);
+    r.saved = !r.saved;
+    
+    // Atualiza visual de TODOS os cards que mostram essa receita
     renderRecipes('recipesContainer', allRecipes);
     renderRecipes('exploreRecipesGrid', allRecipes);
-    renderRecipes('featuredExtra', quickRecipes);
+    updateSavedList();
     
-    // ajuste scroll body
-    document.body.style.overflowY = 'auto';
-    document.documentElement.style.overflowY = 'auto';
-  })();
+    showGoldAlert(r.saved ? "Salvo!" : "Removido", r.saved ? "Receita adicionada aos favoritos." : "Receita removida dos favoritos.");
+  };
+
+  function updateSavedList() {
+    const saved = allRecipes.filter(r => r.saved);
+    const container = document.getElementById('savedRecipesList');
+    if(!container) return;
+    
+    if(saved.length === 0) {
+      container.innerHTML = '<p style="text-align: center; color: #64748B;">Nenhuma receita salva ainda</p>';
+    } else {
+      container.innerHTML = saved.map(r => `
+        <div style="background: white; padding: 15px; border-radius: 20px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px;">
+          <img src="${r.image}" style="width: 60px; height: 60px; border-radius: 15px; object-fit: cover;">
+          <div style="flex: 1;">
+            <h4 style="margin-bottom: 5px;">${r.title}</h4>
+            <i class="fas fa-bookmark" style="color: #F97316;"></i> Salvo
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  window.filterCategory = (cat) => {
+    const filtered = allRecipes.filter(r => r.title.includes(cat));
+    renderRecipes('exploreRecipesGrid', filtered);
+  };
+
+  window.switchScreen = (id) => {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id + 'Screen').classList.add('active');
+    
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const items = document.querySelectorAll('.nav-item');
+    if(id === 'home') items[0].classList.add('active');
+    if(id === 'explore') items[1].classList.add('active');
+    if(id === 'profile') {
+      items[2].classList.add('active');
+      updateSavedList();
+    }
+    
+    if(id === 'explore') {
+      renderRecipes('exploreRecipesGrid', allRecipes);
+    }
+  };
+
+  window.closeModal = (id) => document.getElementById(id).style.display = 'none';
+  
+  window.showSavedModal = () => {
+    switchScreen('profile');
+  };
+  
+  window.showNotifications = () => {
+    showGoldAlert('🔔 Notificações', 'Novas receitas em destaque disponíveis!');
+  };
+
+  // Inicialização
+  renderRecipes('recipesContainer', allRecipes);
+  renderRecipes('exploreRecipesGrid', allRecipes);
+  updateSavedList();
 </script>
 </body>
 </html>
