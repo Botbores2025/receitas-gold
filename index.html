@@ -27,11 +27,34 @@ body {
   color: #1E1E2F;
   font-family: 'Inter', sans-serif;
   min-height: 100vh;
-  padding-top: constant(safe-area-inset-top);
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: 85px;
+  /* Ajuste para não cortar no rodapé do Android */
+  padding-bottom: calc(100px + env(safe-area-inset-bottom));
   overscroll-behavior-y: none;
 }
+
+/* ========== TELA DE CARREGAMENTO (SPLASH) ========== */
+#splash-screen {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: #F8F9FC;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #F97316;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-top: 20px;
+}
+
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 /* ========== TELAS (SISTEMA DE NAVEGAÇÃO) ========== */
 .screen {
@@ -326,7 +349,7 @@ body {
   color: #64748B;
 }
 
-/* ========== BOTTOM NAV ========== */
+/* ========== BOTTOM NAV (AJUSTADO PARA NÃO CORTAR) ========== */
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -337,9 +360,8 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 12px 20px 25px;
+  padding: 12px 20px 35px; /* Padding maior para os botões do Android */
   border-top: 1px solid rgba(0, 0, 0, 0.05);
-  padding-bottom: calc(20px + env(safe-area-inset-bottom));
   z-index: 1000;
 }
 
@@ -357,19 +379,10 @@ body {
   color: #F97316;
 }
 
-.nav-item i {
-  font-size: 22px;
-}
-
-.nav-item span {
-  font-size: 11px;
-  font-weight: 600;
-}
-
-/* ========== FAB ========== */
+/* ========== FAB (AJUSTADO) ========== */
 .fab-add {
   position: fixed;
-  bottom: 90px;
+  bottom: 110px; /* Subiu um pouco para não bater no menu */
   right: 20px;
   width: 58px;
   height: 58px;
@@ -448,7 +461,15 @@ body {
 </head>
 <body>
 
-<!-- ==================== TELA INÍCIO ==================== -->
+<div id="splash-screen">
+    <div class="avatar-app" style="width: 80px; height: 80px; font-size: 40px;">
+        <i class="fas fa-chef-hat"></i>
+    </div>
+    <div class="app-name" style="font-size: 32px; margin-top: 15px;">RiqueFla</div>
+    <div class="badge-premium">SISTEMA GOLD</div>
+    <div class="loader"></div>
+</div>
+
 <div id="homeScreen" class="screen active">
   <div class="app-header">
     <div class="header-title">
@@ -489,7 +510,6 @@ body {
   <div class="recipes-grid" id="recipesContainer"></div>
 </div>
 
-<!-- ==================== TELA EXPLORAR ==================== -->
 <div id="exploreScreen" class="screen">
   <div class="app-header">
     <div class="header-title">
@@ -553,7 +573,6 @@ body {
   <div class="recipes-grid" id="exploreRecipesGrid"></div>
 </div>
 
-<!-- ==================== TELA PERFIL ==================== -->
 <div id="profileScreen" class="screen">
   <div class="app-header">
     <div class="header-title">
@@ -597,7 +616,6 @@ body {
   </div>
 </div>
 
-<!-- ========== BOTTOM NAVIGATION ========== -->
 <div class="bottom-nav">
   <div class="nav-item active" data-screen="home" onclick="switchScreen('home')">
     <i class="fas fa-home"></i>
@@ -613,12 +631,10 @@ body {
   </div>
 </div>
 
-<!-- FAB -->
-<div class="fab-add" onclick="alert('➕ Adicionar nova receita Gold')">
+<div class="fab-add" id="fabBtn">
   <i class="fas fa-plus"></i>
 </div>
 
-<!-- MODAL DE NOTIFICAÇÕES -->
 <div class="modal-overlay" id="notificationsModal">
   <div class="modal-content">
     <h2 style="margin-bottom: 20px;"><i class="far fa-bell" style="margin-right: 10px;"></i> Notificações</h2>
@@ -638,7 +654,17 @@ body {
   </div>
 </div>
 
-<!-- MODAL DE RECEITAS SALVAS -->
+<div class="modal-overlay" id="customAlertModal">
+  <div class="modal-content" style="text-align: center;">
+    <div class="avatar-app" style="margin: 0 auto 20px; background: #F97316;">
+        <i class="fas fa-check"></i>
+    </div>
+    <h2 id="customAlertTitle">Sucesso!</h2>
+    <p id="customAlertText" style="margin-top: 10px; color: #64748B;"></p>
+    <button class="btn-close-modal" onclick="closeModal('customAlertModal')" style="background: #F97316; color: white;">OK</button>
+  </div>
+</div>
+
 <div class="modal-overlay" id="savedModal">
   <div class="modal-content">
     <h2><i class="fas fa-bookmark" style="color: #F97316;"></i> Receitas Salvas</h2>
@@ -647,12 +673,30 @@ body {
   </div>
 </div>
 
-<!-- MODAL DE DETALHES DA RECEITA -->
 <div class="modal-overlay" id="recipeModal">
   <div class="modal-content" id="modalContent"></div>
 </div>
 
 <script>
+  // Função para carregar o splash
+  window.onload = () => {
+      setTimeout(() => {
+          document.getElementById('splash-screen').style.display = 'none';
+      }, 2000); // Mostra o splash por 2 segundos
+  };
+
+  // Função para trocar o alert chato por modal bonito
+  function showGoldAlert(titulo, texto) {
+      document.getElementById('customAlertTitle').innerText = titulo;
+      document.getElementById('customAlertText').innerText = texto;
+      document.getElementById('customAlertModal').style.display = 'flex';
+  }
+
+  // Evento do FAB ajustado
+  document.getElementById('fabBtn').onclick = () => {
+      showGoldAlert("Nova Receita", "Módulo de adição de receitas Gold em breve!");
+  };
+
   // ========== DADOS ==========
   const allRecipes = [
     { id: 1, title: "Burger Artesanal", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400", steps: "🥩 Moa a carne na hora.\n🧂 Tempere com sal grosso.\n🔥 Grelhe 3min cada lado.\n🍞 Monte no brioche.", saved: false },
@@ -694,16 +738,18 @@ body {
     const recipe = allRecipes.find(r => r.id === id);
     recipe.saved = !recipe.saved;
     
-    if(recipe.saved) savedRecipes.push(id);
-    else savedRecipes = savedRecipes.filter(rid => rid !== id);
+    if(recipe.saved) {
+        savedRecipes.push(id);
+        showGoldAlert("Salvo!", "Receita adicionada aos favoritos.");
+    } else {
+        savedRecipes = savedRecipes.filter(rid => rid !== id);
+    }
     
     localStorage.setItem('savedRecipes', JSON.stringify(savedRecipes));
     
-    // Atualiza ícone
     const icon = event.target;
     icon.classList.toggle('saved');
     
-    // Atualiza listas
     renderRecipes('recipesContainer', allRecipes.slice(0,4));
     renderRecipes('exploreRecipesGrid', allRecipes.slice(0,4));
     updateSavedList();
@@ -712,9 +758,9 @@ body {
   // Detalhes da Receita
   function showRecipeDetails(recipe) {
     document.getElementById('modalContent').innerHTML = `
-      <h2>${recipe.title}</h2>
-      <p style="white-space: pre-line; line-height: 1.8;">${recipe.steps}</p>
-      <button class="btn-close-modal" onclick="closeModal('recipeModal')">VOLTAR</button>
+      <h2 style="color: #F97316;">${recipe.title}</h2>
+      <p style="white-space: pre-line; line-height: 1.8; margin-top: 15px;">${recipe.steps}</p>
+      <button class="btn-close-modal" onclick="closeModal('recipeModal')" style="background: #F97316; color: white;">VOLTAR</button>
     `;
     document.getElementById('recipeModal').style.display = 'flex';
   }
@@ -733,7 +779,6 @@ body {
     if(screenId === 'profile') updateSavedList();
   };
 
-  // Funções dos botões do header
   window.showNotifications = () => document.getElementById('notificationsModal').style.display = 'flex';
   window.showSavedModal = () => {
     updateSavedModalList();
@@ -746,12 +791,11 @@ body {
 
   window.closeModal = (id) => document.getElementById(id).style.display = 'none';
 
-  // Atualizar lista de salvos no perfil
   function updateSavedList() {
     const container = document.getElementById('savedRecipesList');
     const saved = allRecipes.filter(r => r.saved);
     if(container) {
-      container.innerHTML = saved.length ? saved.map(r => `<div style="padding:10px; border-bottom:1px solid #eee;">🍽️ ${r.title}</div>`).join('') : '<p>Nenhuma receita salva ainda.</p>';
+      container.innerHTML = saved.length ? saved.map(r => `<div style="padding:15px; border-bottom:1px solid #eee; font-weight: 500;">🍽️ ${r.title}</div>`).join('') : '<p>Nenhuma receita salva ainda.</p>';
     }
   }
 
@@ -761,18 +805,15 @@ body {
     container.innerHTML = saved.length ? saved.map(r => `<div style="padding:15px; background:#F8F9FC; border-radius:15px; margin-bottom:10px;"><strong>${r.title}</strong></div>`).join('') : '<p>Nenhuma receita salva.</p>';
   }
 
-  // Busca
   document.getElementById('searchInput').addEventListener('input', (e) => {
     const term = e.target.value.toLowerCase();
     renderRecipes('recipesContainer', allRecipes.filter(r => r.title.toLowerCase().includes(term)).slice(0,4));
   });
 
-  // Inicialização
   renderRecipes('recipesContainer', allRecipes.slice(0,4));
   renderRecipes('exploreRecipesGrid', allRecipes.slice(0,4));
   updateSavedList();
 
-  // Fechar modais ao clicar fora
   document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', (e) => { if(e.target === m) m.style.display = 'none'; }));
 </script>
 
